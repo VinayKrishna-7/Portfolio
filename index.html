@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vinay Krishna Yandamuri</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #07070f;
+      --surface: rgba(255,255,255,0.03);
+      --border: rgba(255,255,255,0.08);
+      --accent: #5b6fff;
+      --accent2: #00d4ff;
+      --accent3: #a855f7;
+      --text: #f0f0ff;
+      --muted: #6b7699;
+      --dim: #2a2d45;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── CANVAS BG ── */
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 64px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(7,7,15,0.7);
+      backdrop-filter: blur(16px);
+    }
+
+    .nav-logo {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: #fff;
+    }
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #fff; }
+
+    /* ── SECTIONS ── */
+    section {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 48px;
+      width: 100%;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      align-items: center;
+      text-align: center;
+      padding-top: 64px;
+    }
+
+    .hero-eyebrow {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.4em;
+      color: var(--accent);
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .hero-name {
+      font-size: clamp(42px, 7vw, 88px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 10px;
+      background: linear-gradient(140deg, #ffffff 30%, #8899ff 70%, #6633ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-role {
+      font-size: clamp(13px, 2vw, 17px);
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      margin-bottom: 40px;
+    }
+    .hero-role strong { color: var(--accent2); font-weight: 500; }
+
+    .hero-stats {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    .stat-chip {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 14px 24px;
+      text-align: center;
+      backdrop-filter: blur(8px);
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .stat-chip:hover {
+      border-color: rgba(91,111,255,0.4);
+      background: rgba(91,111,255,0.06);
+    }
+    .stat-chip .val {
+      font-size: 26px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.01em;
+    }
+    .stat-chip .lbl {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      margin-top: 3px;
+      font-weight: 500;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border: 1px solid var(--accent);
+    }
+    .btn-primary:hover { background: #4a5eff; transform: translateY(-1px); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,0.25); }
+
+    /* ── SECTION LABELS ── */
+    .section-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.4em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
+      margin-bottom: 48px;
+    }
+    .section-title span { color: var(--muted); font-weight: 300; }
+
+    /* ── ABOUT / EDUCATION ── */
+    #about { padding: 120px 0; min-height: auto; }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 28px;
+      backdrop-filter: blur(6px);
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .card:hover {
+      border-color: rgba(91,111,255,0.3);
+      transform: translateY(-2px);
+    }
+
+    .card-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    .edu-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 5px;
+    }
+    .edu-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .edu-cgpa {
+      font-size: 44px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+    .edu-cgpa-lbl {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .contact-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .contact-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .contact-list li .icon {
+      width: 28px; height: 28px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    .link-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    .link-badge {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .link-badge:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
+
+    /* ── SKILLS ── */
+    #skills { padding: 120px 0; min-height: auto; }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .skill-group {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 24px;
+      backdrop-filter: blur(6px);
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .skill-group:hover {
+      border-color: rgba(91,111,255,0.3);
+      transform: translateY(-2px);
+    }
+
+    .skill-group-title {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      margin-bottom: 16px;
+    }
+
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    .skill-bar-list { display: flex; flex-direction: column; gap: 12px; }
+    .skill-bar-item {}
+    .skill-bar-header { display: flex; justify-content: space-between; margin-bottom: 5px; }
+    .skill-bar-name { font-size: 11px; color: #ccd; font-weight: 500; }
+    .skill-bar-pct { font-size: 10px; color: var(--muted); }
+    .skill-track {
+      height: 3px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .skill-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 1s ease;
+    }
+
+    /* ── PROJECTS ── */
+    #projects { padding: 120px 0; min-height: auto; }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .project-card {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 30px;
+      backdrop-filter: blur(6px);
+      transition: border-color 0.3s, transform 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .project-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .project-card:hover { transform: translateY(-4px); }
+    .project-card:hover::before { opacity: 1; }
+
+    .project-card.blue { border-top: 2px solid var(--accent); }
+    .project-card.blue::before { background: radial-gradient(ellipse at top, rgba(91,111,255,0.07) 0%, transparent 70%); }
+    .project-card.cyan { border-top: 2px solid var(--accent2); }
+    .project-card.cyan::before { background: radial-gradient(ellipse at top, rgba(0,212,255,0.07) 0%, transparent 70%); }
+
+    .project-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .project-cat {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      padding: 4px 10px;
+      border-radius: 3px;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+
+    .project-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .project-subtitle {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .project-metric {
+      display: flex;
+      gap: 16px;
+    }
+    .metric {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 14px;
+      text-align: center;
+    }
+    .metric .m-val { font-size: 18px; font-weight: 700; color: #fff; }
+    .metric .m-lbl { font-size: 8px; letter-spacing: 0.15em; color: var(--muted); margin-top: 2px; }
+
+    .project-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 20px;
+    }
+    .project-bullets li {
+      font-size: 11px;
+      line-height: 1.5;
+      color: #6a7a99;
+      display: flex;
+      gap: 8px;
+    }
+    .project-bullets li::before {
+      content: '—';
+      color: var(--dim);
+      flex-shrink: 0;
+    }
+
+    .tech-stack { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+    .tech-tag {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--muted);
+    }
+
+    /* ── ACHIEVEMENTS / CERTS ── */
+    #achievements { padding: 120px 0; min-height: auto; }
+
+    .ach-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .ach-card {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 28px;
+      backdrop-filter: blur(6px);
+    }
+
+    .ach-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .ach-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .ach-item:first-child { padding-top: 0; }
+
+    .ach-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .ach-title { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 3px; }
+    .ach-sub { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+    .cert-list { display: flex; flex-direction: column; gap: 2px; }
+    .cert-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+    .cert-item:hover { background: rgba(255,255,255,0.03); }
+
+    .cert-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .cert-name { font-size: 12px; font-weight: 500; color: #ccd; flex: 1; }
+    .cert-org {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 32px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-name { font-size: 11px; font-weight: 600; letter-spacing: 0.15em; color: var(--muted); }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { font-size: 10px; letter-spacing: 0.15em; color: var(--dim); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: #fff; }
+
+    /* ── SCROLL INDICATOR ── */
+    .scroll-indicator {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent3));
+      z-index: 200;
+      transition: width 0.1s;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 40px; height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      margin-bottom: 14px;
+    }
+
+    /* ── ANIMATIONS ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<div class="scroll-indicator" id="scrollBar"></div>
+<canvas id="bg-canvas"></canvas>
+
+<nav>
+  <div class="nav-logo">VK<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#hero">HOME</a></li>
+    <li><a href="#about">ABOUT</a></li>
+    <li><a href="#skills">SKILLS</a></li>
+    <li><a href="#projects">PROJECTS</a></li>
+    <li><a href="#achievements">ACHIEVEMENTS</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="container" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="hero-eyebrow fade-in">B.Tech CSE · Cybersecurity · Pragati Engineering College</div>
+    <div class="hero-name fade-in" style="transition-delay:0.1s">VINAY KRISHNA<br>YANDAMURI</div>
+    <div class="hero-role fade-in" style="transition-delay:0.2s">
+      <strong>ML Engineer</strong> &nbsp;·&nbsp; Python Developer &nbsp;·&nbsp; Cybersecurity Learner
+    </div>
+    <div class="hero-stats fade-in" style="transition-delay:0.3s">
+      <div class="stat-chip"><div class="val">8.1</div><div class="lbl">CGPA</div></div>
+      <div class="stat-chip"><div class="val">~80%</div><div class="lbl">ML ACCURACY</div></div>
+      <div class="stat-chip"><div class="val">250+</div><div class="lbl">DSA PROBLEMS</div></div>
+      <div class="stat-chip"><div class="val">6</div><div class="lbl">CERTIFICATIONS</div></div>
+      <div class="stat-chip"><div class="val">2</div><div class="lbl">ML PROJECTS</div></div>
+    </div>
+    <div class="hero-cta fade-in" style="transition-delay:0.4s">
+      <a href="#projects" class="btn btn-primary">VIEW PROJECTS</a>
+      <a href="#achievements" class="btn btn-ghost">CERTIFICATIONS</a>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="container">
+    <div class="divider fade-in"></div>
+    <div class="section-label fade-in">About</div>
+    <div class="section-title fade-in">Education &amp; <span>Contact</span></div>
+    <div class="about-grid fade-in">
+      <div class="card">
+        <div class="card-label">EDUCATION</div>
+        <div class="edu-name">Pragati Engineering College</div>
+        <div class="edu-sub">B.Tech in Computer Science (Cybersecurity) · Surampalem</div>
+        <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:16px;">
+          <div class="edu-cgpa">8.1</div>
+          <div>
+            <div class="edu-cgpa-lbl">CGPA</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">2023 – 2027</div>
+          </div>
+        </div>
+        <div style="height:1px;background:var(--border);margin-bottom:16px;"></div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.7;">
+          Currently pursuing a specialization in <strong style="color:#ccd;font-weight:500;">Cybersecurity</strong>
+          alongside a strong focus on Machine Learning and Data Science.
+          Actively solving DSA problems and building production-grade ML pipelines.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">CONTACT & LINKS</div>
+        <ul class="contact-list">
+          <li><span class="icon">✉</span><span>vinaykrishna220@gmail.com</span></li>
+          <li><span class="icon">📞</span><span>+91-7702882126</span></li>
+          <li><span class="icon">📍</span><span>Rajahmundry, India</span></li>
+        </ul>
+        <div class="link-row">
+          <span class="link-badge">GitHub ↗</span>
+          <span class="link-badge">LeetCode ↗</span>
+          <span class="link-badge">HackerRank ↗</span>
+        </div>
+        <div style="height:1px;background:var(--border);margin:20px 0;"></div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.7;">
+          Open to internships, collaborations, and project opportunities in
+          <strong style="color:#ccd;font-weight:500;">Machine Learning</strong>,
+          <strong style="color:#ccd;font-weight:500;">Data Science</strong>, and
+          <strong style="color:#ccd;font-weight:500;">Cybersecurity</strong>.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="container">
+    <div class="divider fade-in"></div>
+    <div class="section-label fade-in">Expertise</div>
+    <div class="section-title fade-in">Technical <span>Skills</span></div>
+    <div class="skills-grid fade-in">
+      <div class="skill-group">
+        <div class="skill-group-title" style="color:var(--accent);">LANGUAGES</div>
+        <div class="skill-bar-list">
+          <div class="skill-bar-item">
+            <div class="skill-bar-header"><span class="skill-bar-name">Python</span><span class="skill-bar-pct">90%</span></div>
+            <div class="skill-track"><div class="skill-fill" style="width:90%;background:linear-gradient(90deg,var(--accent),var(--accent3));"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-header"><span class="skill-bar-name">JavaScript</span><span class="skill-bar-pct">65%</span></div>
+            <div class="skill-track"><div class="skill-fill" style="width:65%;background:linear-gradient(90deg,#ffcc00,#ff8800);"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-header"><span class="skill-bar-name">SQL</span><span class="skill-bar-pct">78%</span></div>
+            <div class="skill-track"><div class="skill-fill" style="width:78%;background:linear-gradient(90deg,var(--accent2),#0088ff);"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-header"><span class="skill-bar-name">C</span><span class="skill-bar-pct">60%</span></div>
+            <div class="skill-track"><div class="skill-fill" style="width:60%;background:linear-gradient(90deg,#44ddaa,#009966);"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title" style="color:var(--accent2);">MACHINE LEARNING</div>
+        <div class="skill-tags">
+          <span class="tag" style="background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.2);color:var(--accent2);">Random Forest</span>
+          <span class="tag" style="background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.2);color:var(--accent2);">Logistic Regression</span>
+          <span class="tag" style="background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.2);color:var(--accent2);">SVM</span>
+          <span class="tag" style="background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.2);color:var(--accent2);">Decision Trees</span>
+          <span class="tag" style="background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.2);color:var(--accent2);">Naive Bayes</span>
+          <span class="tag" style="background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.2);color:var(--accent2);">Gradient Boosting</span>
+          <span class="tag" style="background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.2);color:var(--accent2);">Ensemble Methods</span>
+          <span class="tag" style="background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.2);color:var(--accent2);">Feature Engineering</span>
+          <span class="tag" style="background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.2);color:var(--accent2);">GridSearchCV</span>
+          <span class="tag" style="background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.2);color:var(--accent2);">Cross-Validation</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title" style="color:var(--accent3);">FRAMEWORKS & TOOLS</div>
+        <div class="skill-tags">
+          <span class="tag" style="background:rgba(168,85,247,0.07);border:1px solid rgba(168,85,247,0.2);color:var(--accent3);">scikit-learn</span>
+          <span class="tag" style="background:rgba(168,85,247,0.07);border:1px solid rgba(168,85,247,0.2);color:var(--accent3);">pandas</span>
+          <span class="tag" style="background:rgba(168,85,247,0.07);border:1px solid rgba(168,85,247,0.2);color:var(--accent3);">NumPy</span>
+          <span class="tag" style="background:rgba(168,85,247,0.07);border:1px solid rgba(168,85,247,0.2);color:var(--accent3);">HTML5 / CSS3</span>
+          <span class="tag" style="background:rgba(168,85,247,0.07);border:1px solid rgba(168,85,247,0.2);color:var(--accent3);">Git & GitHub</span>
+          <span class="tag" style="background:rgba(168,85,247,0.07);border:1px solid rgba(168,85,247,0.2);color:var(--accent3);">VS Code</span>
+          <span class="tag" style="background:rgba(168,85,247,0.07);border:1px solid rgba(168,85,247,0.2);color:var(--accent3);">Jupyter</span>
+          <span class="tag" style="background:rgba(168,85,247,0.07);border:1px solid rgba(168,85,247,0.2);color:var(--accent3);">Google Colab</span>
+        </div>
+      </div>
+      <div class="skill-group" style="grid-column:1/-1;">
+        <div class="skill-group-title" style="color:#aaa;">CORE CONCEPTS</div>
+        <div class="skill-tags">
+          <span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:#9aabcc;">Data Structures & Algorithms</span>
+          <span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:#9aabcc;">Object-Oriented Programming</span>
+          <span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:#9aabcc;">Database Management (DBMS)</span>
+          <span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:#9aabcc;">Operating Systems</span>
+          <span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:#9aabcc;">ML Model Evaluation</span>
+          <span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:#9aabcc;">Data Preprocessing Pipelines</span>
+          <span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:#9aabcc;">Confusion Matrix · ROC-AUC</span>
+          <span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:#9aabcc;">Hyperparameter Tuning</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="container">
+    <div class="divider fade-in"></div>
+    <div class="section-label fade-in">Work</div>
+    <div class="section-title fade-in">Technical <span>Projects</span></div>
+    <div class="projects-grid fade-in">
+      <div class="project-card blue">
+        <span class="project-cat" style="background:rgba(91,111,255,0.1);color:var(--accent);border:1px solid rgba(91,111,255,0.2);">MACHINE LEARNING · 2025</span>
+        <div class="project-title">Scam Detector</div>
+        <div class="project-subtitle">ML Fraud Detection System</div>
+        <div class="project-metric" style="margin-bottom:20px;">
+          <div class="metric"><div class="m-val" style="color:var(--accent);">~80%</div><div class="m-lbl">ACCURACY</div></div>
+          <div class="metric"><div class="m-val">2,000+</div><div class="m-lbl">RECORDS</div></div>
+          <div class="metric"><div class="m-val">5-Fold</div><div class="m-lbl">CV</div></div>
+        </div>
+        <ul class="project-bullets">
+          <li>Engineered an end-to-end fraud detection pipeline on 2,000+ financial transaction records covering data ingestion, preprocessing, and feature engineering.</li>
+          <li>Deployed ensemble voting classifier (Decision Tree + Naive Bayes + SVM) to minimize false-negative rate and improve recall on fraudulent transactions.</li>
+          <li>Evaluated via confusion matrix, precision/recall, F1-score, and ROC-AUC — demonstrating production-standard ML evaluation practices.</li>
+        </ul>
+        <div class="tech-stack">
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">scikit-learn</span>
+          <span class="tech-tag">Random Forest</span>
+          <span class="tech-tag">Logistic Regression</span>
+          <span class="tech-tag">Ensemble Learning</span>
+          <span class="tech-tag">Feature Engineering</span>
+        </div>
+      </div>
+      <div class="project-card cyan">
+        <span class="project-cat" style="background:rgba(0,212,255,0.07);color:var(--accent2);border:1px solid rgba(0,212,255,0.2);">MACHINE LEARNING · 2024</span>
+        <div class="project-title">AgriPredict</div>
+        <div class="project-subtitle">Crop Yield Prediction Engine</div>
+        <div class="project-metric" style="margin-bottom:20px;">
+          <div class="metric"><div class="m-val" style="color:var(--accent2);">~78%</div><div class="m-lbl">ACCURACY</div></div>
+          <div class="metric"><div class="m-val">1,200+</div><div class="m-lbl">RECORDS</div></div>
+          <div class="metric"><div class="m-val">25%</div><div class="m-lbl">FASTER</div></div>
+        </div>
+        <ul class="project-bullets">
+          <li>Developed a supervised regression model predicting crop yields from soil and climate parameters across 1,200+ agricultural records.</li>
+          <li>Applied hyperparameter tuning via GridSearchCV (n_estimators, max_depth, min_samples_split), improving model robustness on unseen data.</li>
+          <li>Optimized preprocessing pipelines (StandardScaler) to reduce processing time by 25% and ranked feature importance for stakeholder-ready insights.</li>
+        </ul>
+        <div class="tech-stack">
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">scikit-learn</span>
+          <span class="tech-tag">Random Forest</span>
+          <span class="tech-tag">Gradient Boosting</span>
+          <span class="tech-tag">GridSearchCV</span>
+          <span class="tech-tag">StandardScaler</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="achievements">
+  <div class="container">
+    <div class="divider fade-in"></div>
+    <div class="section-label fade-in">Recognition</div>
+    <div class="section-title fade-in">Achievements &amp; <span>Certifications</span></div>
+    <div class="ach-grid fade-in">
+      <div class="ach-card">
+        <div class="card-label" style="margin-bottom:4px;">ACHIEVEMENTS</div>
+        <div class="ach-item">
+          <div class="ach-icon" style="background:rgba(255,200,0,0.1);border:1px solid rgba(255,200,0,0.2);">🏆</div>
+          <div>
+            <div class="ach-title">Top 10 — National-Level Hackathon</div>
+            <div class="ach-sub">Built and presented a functional technical solution under time constraints. Demonstrated ability to ideate, build, and pitch rapidly.</div>
+          </div>
+        </div>
+        <div class="ach-item">
+          <div class="ach-icon" style="background:rgba(91,111,255,0.1);border:1px solid rgba(91,111,255,0.2);">⚡</div>
+          <div>
+            <div class="ach-title">250+ DSA Problems Solved</div>
+            <div class="ach-sub">Across LeetCode & HackerRank — covering Arrays, Trees, Graphs, Dynamic Programming, Binary Search, and SQL.</div>
+          </div>
+        </div>
+        <div class="ach-item">
+          <div class="ach-icon" style="background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);">🤖</div>
+          <div>
+            <div class="ach-title">2 End-to-End ML Projects</div>
+            <div class="ach-sub">Built production-standard ML pipelines with 78–80% accuracy, cross-validation, and full evaluation metrics.</div>
+          </div>
+        </div>
+      </div>
+      <div class="ach-card">
+        <div class="card-label" style="margin-bottom:8px;">CERTIFICATIONS</div>
+        <div class="cert-list">
+          <div class="cert-item">
+            <div class="cert-dot" style="background:#0078d4;box-shadow:0 0 6px #0078d4;"></div>
+            <div class="cert-name">Azure AI Fundamentals</div>
+            <div class="cert-org">MICROSOFT</div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-dot" style="background:#006699;box-shadow:0 0 6px #006699;"></div>
+            <div class="cert-name">Getting Started with AI</div>
+            <div class="cert-org">IBM</div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-dot" style="background:#cc0000;box-shadow:0 0 6px #cc0000;"></div>
+            <div class="cert-name">Computer Science 101</div>
+            <div class="cert-org">STANFORD</div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-dot" style="background:#00aaff;box-shadow:0 0 6px #00aaff;"></div>
+            <div class="cert-name">Privacy & Security in Online Social Media</div>
+            <div class="cert-org">IIT MADRAS</div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-dot" style="background:#2ec866;box-shadow:0 0 6px #2ec866;"></div>
+            <div class="cert-name">Problem Solving</div>
+            <div class="cert-org">HACKERRANK</div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-dot" style="background:#f7c244;box-shadow:0 0 6px #f7c244;"></div>
+            <div class="cert-name">Python</div>
+            <div class="cert-org">MICROSOFT</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-name">VINAY KRISHNA YANDAMURI · 2025</div>
+  <div class="footer-links">
+    <a href="#">GitHub</a>
+    <a href="#">LeetCode</a>
+    <a href="#">HackerRank</a>
+    <a href="mailto:vinaykrishna220@gmail.com">Email</a>
+  </div>
+</footer>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.183.2/build/three.module.js"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+
+const canvas = document.getElementById('bg-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.z = 14;
+
+const starGeo = new THREE.BufferGeometry();
+const N = 700;
+const pos = new Float32Array(N * 3);
+for (let i = 0; i < N * 3; i++) pos[i] = (Math.random() - 0.5) * 90;
+starGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+const starMat = new THREE.PointsMaterial({ color: 0x8899cc, size: 0.07, transparent: true, opacity: 0.5 });
+const stars = new THREE.Points(starGeo, starMat);
+scene.add(stars);
+
+const orbData = [
+  { color: 0x3355ff, r: 0.5, x: -5, y: 2, z: -2 },
+  { color: 0x00bbff, r: 0.35, x: 5, y: -2, z: -3 },
+  { color: 0x7722ff, r: 0.45, x: 2, y: 4, z: -4 },
+  { color: 0x00ddaa, r: 0.25, x: -3, y: -3.5, z: -1 },
+];
+const orbs = orbData.map((d, i) => {
+  const geo = new THREE.SphereGeometry(d.r, 24, 24);
+  const mat = new THREE.MeshBasicMaterial({ color: d.color, transparent: true, opacity: 0.12 });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.set(d.x, d.y, d.z);
+  mesh.name = `orb${i}`;
+  scene.add(mesh);
+  return { mesh, ox: d.x, oy: d.y, speed: 0.15 + i * 0.07 };
+});
+
+let mx = 0, my = 0;
+window.addEventListener('mousemove', e => {
+  mx = (e.clientX / window.innerWidth - 0.5) * 2;
+  my = -(e.clientY / window.innerHeight - 0.5) * 2;
+});
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+const scrollBar = document.getElementById('scrollBar');
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  scrollBar.style.width = pct + '%';
+});
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+const clock = new THREE.Clock();
+function animate() {
+  requestAnimationFrame(animate);
+  const t = clock.getElapsedTime();
+  camera.position.x += (mx * 0.6 - camera.position.x) * 0.04;
+  camera.position.y += (my * 0.4 - camera.position.y) * 0.04;
+  camera.lookAt(0, 0, 0);
+  stars.rotation.y = t * 0.006;
+  stars.rotation.x = t * 0.002;
+  orbs.forEach((o, i) => {
+    o.mesh.position.x = o.ox + Math.sin(t * o.speed + i) * 1.2;
+    o.mesh.position.y = o.oy + Math.cos(t * o.speed * 0.7 + i) * 0.8;
+  });
+  renderer.render(scene, camera);
+}
+animate();
+</script>
+
+</body>
+</html>
